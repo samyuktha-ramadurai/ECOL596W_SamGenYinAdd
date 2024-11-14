@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Import Data
 
 ```{r}
-tits <- read.csv('datasets/tit_clean.csv')
+tits <- read.csv('tit_clean.csv')
 View(tits)
 head(tits)
 ```
@@ -37,6 +37,7 @@ lmm <- lmer(day_14_weight ~ number_chicks_after_manipulation + number_chicks_fle
 summary(lmm)
 
 ```
+
 ```{r}
 
 lmm <- lmer(day_14_tarsus_length ~ number_chicks_after_manipulation + number_chicks_fledged_from_rear_nest + (1|hatch_year) + (1|rear_Box), data = tits_selected)
@@ -49,7 +50,7 @@ library(ggplot2)
 
 plot_tarsus_length <- ggplot(data = tits_selected, aes(x = number_chicks_after_manipulation, y = day_14_tarsus_length))+ 
   geom_point() +
-  geom_abline(slope = -0.0759, intercept = 16.65, colour = 'blue')
+  geom_abline(slope = -0.0731, intercept = 16.704, colour = 'blue')
 plot_tarsus_length
 
 ggsave('plot_tarsus_length.png')
@@ -59,11 +60,12 @@ ggsave('plot_tarsus_length.png')
 
 plot_weight <- ggplot(data = tits_selected, aes(x = number_chicks_after_manipulation, y = day_14_weight))+ 
   geom_point() +
-  geom_abline(slope = -0.2095, intercept = 9.975, colour='red')
+  geom_abline(slope = -0.177, intercept = 10.39, colour='red')
 plot_weight
 
 ggsave('plot_weight.png')
 ```
+
 ```{r}
 
 plot_tarsus_length_fledged <- ggplot(data = tits_selected, aes(x = number_chicks_fledged_from_rear_nest, y = day_14_tarsus_length))+ 
@@ -72,6 +74,7 @@ plot_tarsus_length_fledged
 
 ggsave('plot_fledged_tarsus_length.png')
 ```
+
 ```{r}
 
 plot_weight_fledged <- ggplot(data = tits_selected, aes(x = number_chicks_fledged_from_rear_nest, y = day_14_weight))+ 
@@ -80,6 +83,7 @@ plot_weight_fledged
 
 ggsave('plot_fledged_weight.png')
 ```
+
 ```{r}
 plot_length_weight <- ggplot(data = tits_selected, aes(x = day_14_tarsus_length, y = day_14_weight))+ 
   geom_point() 
