@@ -20,7 +20,7 @@ head(tits)
 
 ```{r}
 library(tidyverse)
-tits_selected <- tits |> select(number_chicks_fledged_from_rear_nest, day_14_tarsus_length, day_14_weight, net_rearing_manipulation, hatch_year) |>
+tits_selected <- tits |> select(number_chicks_fledged_from_rear_nest, day_14_tarsus_length, day_14_weight, net_rearing_manipulation, hatch_year, rear_Box) |>
   filter(number_chicks_fledged_from_rear_nest > 0) |>
   mutate(number_chicks_after_manipulation = number_chicks_fledged_from_rear_nest + net_rearing_manipulation) |>
   filter(number_chicks_after_manipulation > 0)
@@ -33,13 +33,13 @@ View(tits_selected)
 library(lme4)
 library(lmerTest)
 
-lmm <- lmer(day_14_weight ~ number_chicks_after_manipulation + number_chicks_fledged_from_rear_nest + (1|hatch_year), data = tits_selected)
+lmm <- lmer(day_14_weight ~ number_chicks_after_manipulation + number_chicks_fledged_from_rear_nest + (1|hatch_year) + (1|rear_Box), data = tits_selected)
 summary(lmm)
 
 ```
 ```{r}
 
-lmm <- lmer(day_14_tarsus_length ~ number_chicks_after_manipulation + number_chicks_fledged_from_rear_nest + (1|hatch_year), data = tits_selected)
+lmm <- lmer(day_14_tarsus_length ~ number_chicks_after_manipulation + number_chicks_fledged_from_rear_nest + (1|hatch_year) + (1|rear_Box), data = tits_selected)
 summary(lmm)
 ```
 ## Plots
