@@ -26,6 +26,16 @@ tits_selected <- tits |> select(number_chicks_fledged_from_rear_nest, day_14_tar
   filter(number_chicks_after_manipulation > 0)
 View(tits_selected)
 ```
+# LM
+
+```{r}
+lm <- lm(day_14_tarsus_length ~  number_chicks_fledged_from_rear_nest,  data = tits_selected)
+summary(lm)
+```
+```{r}
+lm <- lm(day_14_weight ~  number_chicks_fledged_from_rear_nest,  data = tits_selected)
+summary(lm)
+```
 
 ## LMMs
 
@@ -33,14 +43,14 @@ View(tits_selected)
 library(lme4)
 library(lmerTest)
 
-lmm <- lmer(day_14_weight ~ number_chicks_after_manipulation + number_chicks_fledged_from_rear_nest + (1|hatch_year) + (1|rear_Box), data = tits_selected)
+lmm <- lmer(day_14_weight ~ number_chicks_after_manipulation + (1|hatch_year) + (1|rear_Box), data = tits_selected)
 summary(lmm)
 
 ```
 
-```{r}
 
-lmm <- lmer(day_14_tarsus_length ~ number_chicks_after_manipulation + number_chicks_fledged_from_rear_nest + (1|hatch_year) + (1|rear_Box), data = tits_selected)
+```{r}
+lmm <- lmer(day_14_tarsus_length ~  number_chicks_after_manipulation + (1|hatch_year) + (1|rear_Box), data = tits_selected)
 summary(lmm)
 ```
 ## Plots
@@ -50,7 +60,7 @@ library(ggplot2)
 
 plot_tarsus_length <- ggplot(data = tits_selected, aes(x = number_chicks_after_manipulation, y = day_14_tarsus_length))+ 
   geom_point() +
-  geom_abline(slope = -0.0731, intercept = 16.704, colour = 'blue')
+  geom_abline(slope = -0.028, intercept = 16.995, colour = 'blue')
 plot_tarsus_length
 
 ggsave('plot_tarsus_length.png')
@@ -60,7 +70,7 @@ ggsave('plot_tarsus_length.png')
 
 plot_weight <- ggplot(data = tits_selected, aes(x = number_chicks_after_manipulation, y = day_14_weight))+ 
   geom_point() +
-  geom_abline(slope = -0.177, intercept = 10.39, colour='red')
+  geom_abline(slope = -0.0796, intercept = 11.03, colour='red')
 plot_weight
 
 ggsave('plot_weight.png')
@@ -69,7 +79,8 @@ ggsave('plot_weight.png')
 ```{r}
 
 plot_tarsus_length_fledged <- ggplot(data = tits_selected, aes(x = number_chicks_fledged_from_rear_nest, y = day_14_tarsus_length))+ 
-  geom_point() 
+  geom_point() +
+  geom_abline(slope = -0.02, intercept = 16.96, colour='blue')
 plot_tarsus_length_fledged
 
 ggsave('plot_fledged_tarsus_length.png')
@@ -78,7 +89,8 @@ ggsave('plot_fledged_tarsus_length.png')
 ```{r}
 
 plot_weight_fledged <- ggplot(data = tits_selected, aes(x = number_chicks_fledged_from_rear_nest, y = day_14_weight))+ 
-  geom_point() 
+  geom_point()+
+  geom_abline(slope = -0.045, intercept = 10.73, colour='red')
 plot_weight_fledged
 
 ggsave('plot_fledged_weight.png')
