@@ -1,0 +1,44 @@
+library(ggplot2)
+library(ggthemr)
+library(lmerTest) # for extracting p vals from mixed models
+library(lme4) # mixed models
+library(dplyr)
+
+library(readr)
+tit_clean <- read_csv("datasets/tit_clean.csv")
+View(tit_clean)
+
+library(readr)
+tit_metadata <- read_csv("datasets/tit_metadata.csv")
+View(tit_metadata)
+
+###Supplemental figures of successful fledlings vs survival to next breeding season
+survival <- glm(chick_survival_to_first_breed_season ~ number_chicks_fledged_from_rear_nest, family = binomial, data = tit_clean)
+summary(survival)
+
+tit_clean$chick_survival_to_first_breed_season <- as.factor(tit_clean$chick_survival_to_first_breed_season)
+
+ggplot(tit_clean, aes(x = chick_survival_to_first_breed_season, y = number_chicks_fledged_from_rear_nest)) +
+  geom_boxplot() +
+  labs(
+    title = "Number of Fledglings vs. Chick Survival",
+    x = "Chick Survival to First Breeding Season (0 = No, 1 = Yes)",
+    y = "Number of Chicks Fledged"
+  ) +
+  theme_minimal()
+
+### There was like no difference in the two boxplots suggesting that the number of fledglings isn't a strong predictor of chick survival to the first breeding season
+
+# Distributions of fledglings between chicks that survived
+ggplot(tit_clean, aes(x = number_chicks_fledged_from_rear_nest, fill = chick_survival_to_first_breed_season)) +
+  geom_density(alpha = 0.5) +
+  scale_fill_manual(values = c("red", "blue"), labels = c("No", "Yes")) +
+  labs(
+    title = "Density Plot of Number of Fledglings by Chick Survival",
+    x = "Number of Chicks Fledged",
+    y = "Density",
+    fill = "Survival to First Breeding"
+  ) +
+  theme_minimal()
+
+###This figure again shows there is no correlation between fledgling success and the chick's adult survival
